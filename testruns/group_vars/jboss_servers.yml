@@ -1,0 +1,5 @@
+local_home: "{{ lookup('env','HOME') }}"
+remote_home: "{{ansible_env.HOME}}"
+jboss_home: "{{remote_home}}/jboss_{{inventory_hostname}}/"
+wildfly_zip_src: "{{local_home}}/downloads/{{jboss_version}}.zip"
+flyway_download_zip: "{{local_home}}/downloads/flyway.zip"

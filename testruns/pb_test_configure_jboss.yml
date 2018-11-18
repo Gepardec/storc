@@ -1,0 +1,23 @@
+- name: Test Installation
+#  connection: local
+  hosts: "{{host}}"
+  environment:
+    JBOSS_HOME: "{{jboss_home | default('jboss_home_ist_nicht_gesetzt')}}"
+  tasks:
+  - name: Install JBoss
+    wildfly_install:
+      zip: /home/esiegl/Downloads/jboss-eap-6.4.0.zip
+      jboss_home: /home/esiegl/jboss_test_appl1
+    when: do_install is defined and do_install == "true"
+  
+  - name: Configure JBoss
+    wildfly_configure:
+      jboss_home: /home/siegl/jboss_test
+      jboss_version: jboss-eap-6.4.0
+      jboss_port_offset: "200"
+      dir: /home/siegl/ADEBA/ansible/testruns/configs/test2
+    register: output
+  - name: dump JBoss output
+    debug:
+      msg: '{{ output.meta }}'
+

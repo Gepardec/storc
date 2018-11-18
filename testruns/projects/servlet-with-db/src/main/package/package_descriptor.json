@@ -1,0 +1,31 @@
+{
+  "flyway_install": {
+      "config": "flyway-install/config"
+  }, 
+  "flyway_pkg": {
+      "artifact_id": "flyway", 
+      "classifier": "", 
+      "extension": "zip", 
+      "group_id": "org.flywaydb", 
+      "version": "4.2.0"
+  }, 
+  "jboss_install": {
+      "config": "config"
+  }, 
+  "jboss_pkg": {
+      "artifact_id": "jboss-eap", 
+      "classifier": "", 
+      "extension": "zip", 
+      "group_id": "org.jboss", 
+      "version": "6.4.0"
+  },
+  prerequisites: [
+      {
+          "artifact_id": "configdependency", 
+          "classifier": "pkg", 
+          "extension": "zip", 
+          "group_id": "at.test", 
+          "version": "1.0.0"
+      }
+  ]
+}

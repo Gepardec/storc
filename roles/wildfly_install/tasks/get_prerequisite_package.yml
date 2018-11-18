@@ -1,0 +1,25 @@
+---
+- block:
+  - name: Download package
+    include_tasks: download_from_nexus.yml
+    vars:
+      pkg_name: "prereq_pkg_{{item.artifact_id}}"
+      d_pkg: "{{item}}"
+      local_unzip: true
+      remote_unzip: true
+
+  - name: Read package descriptor
+    import_tasks: read_package_config.yml
+
+  - set_fact:
+      pre_pkg:
+        pkg: "{{akt_pkg}}"
+        config: "{{akt_config}}"
+
+  - set_fact:
+      prerequisites: "{{ prerequisites + [pre_pkg] }}"
+
+  - name: Print prerequisites
+    debug:
+      var: prerequisites
+...

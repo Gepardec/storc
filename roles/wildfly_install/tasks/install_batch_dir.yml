@@ -1,0 +1,27 @@
+---
+
+- name: Clean dir
+  file:
+    state: absent
+    path: "{{b_dir_dest}}"
+  when: l_clean != false
+  vars:
+    l_clean: "{{ clean_dest | default('true') }}"
+
+- name: Check for dir in package
+  stat:
+    path: "{{b_dir_src}}"
+  register: check_result
+
+- name: Create dir
+  file:
+    state: directory
+    path: "{{b_dir_dest}}"
+  when: check_result.stat.exists != false
+
+- name: Copy batch directory to destination
+  command: cp -r {{b_dir_src}}/. {{b_dir_dest}}
+  when: check_result.stat.exists != false
+
+...
+

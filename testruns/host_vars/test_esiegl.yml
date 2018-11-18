@@ -1,0 +1,23 @@
+#remote_home: "{{ansible_env.HOME}}"
+jboss_home: "{{remote_home}}/jboss_{{inventory_hostname}}"
+jboss_port_offset: 200
+
+jboss_rc_file: "{{remote_home}}/.{{inventory_hostname}}rc"
+java_base: "/usr/lib/jvm"
+
+jboss_maven_version: 6.4.0
+jboss_maven_artifact_id: jboss-eap
+jboss_maven_group_id: "org.jboss"
+
+flyway_maven_group_id: org.flywaydb
+flyway_maven_artifact_id: flyway
+flyway_maven_version: 4.2.0
+
+maven_repository_url: "file://{{ local_home }}/.m2/repository/"
+is_local_repo: true
+
+batch_home: "{{remote_home}}/batch_{{inventory_hostname}}/"
+my_batch_property: "Instanz {{inventory_hostname}}"
+
+db_jdbc_url: "jdbc:h2:tcp://localhost:9092/~/test"
+test_property: meinvalue

@@ -1,0 +1,17 @@
+---
+- name: Installation der JBoss-Skripts auf
+  debug:
+    msg: "jboss_home: {{jboss_home}} jboss_port_offset: {{jboss_port_offset}}"
+- name: Kopieren des Skripts und symbolischen Link setzen
+  copy:
+    src: jboss.sh
+    dest: "{{remote_home}}/bin/"
+    mode: a+x
+- file:
+    src: "{{remote_home}}/bin/jboss.sh"
+    dest: "{{remote_home}}/bin/{{ansible_user}}"
+    state: link
+- name: Create jboss_rc_file configuration
+  template:
+    src: jboss_rc_file.j2
+    dest: "{{l_jboss_rc_file}}"

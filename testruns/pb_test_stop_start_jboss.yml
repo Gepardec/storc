@@ -1,0 +1,26 @@
+- name: Test Installation
+  connection: local
+  hosts: localhost
+  tasks:
+  - name: Stop JBoss
+    wildfly_configure:
+      jboss_home: /home/esiegl/jboss_test_appl1/
+      jboss_version: jboss-eap-6.4.0
+      jboss_port_offset: "200"
+      stop: true
+    register: output
+  - name: dump JBoss output
+    debug:
+      msg: '{{ output.meta }}'
+
+  - name: Start JBoss
+    wildfly_configure:
+      jboss_home: /home/esiegl/jboss_test_appl1/
+      jboss_version: jboss-eap-6.4.0
+      jboss_port_offset: "200"
+      start: true
+    register: output
+  - name: dump JBoss output
+    debug:
+      msg: '{{ output.meta }}'
+

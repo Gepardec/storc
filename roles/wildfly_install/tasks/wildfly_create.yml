@@ -1,0 +1,38 @@
+---
+
+- set_fact:
+    java_version: "{{app_pkg.config.java_version}}"
+  when: app_pkg.config.java_version
+
+- set_fact:
+    jboss_version: "{{app_pkg.config.jboss_pkg.artifact_id}}-{{app_pkg.config.jboss_pkg.version}}"
+
+- name: Download JBoss package
+  import_tasks: download_from_nexus.yml
+  vars:
+    pkg_name: "jboss_pkg"
+    d_pkg: "{{app_pkg.config.jboss_pkg}}"
+    remote_copy: true
+
+- name: Stop JBoss in case it exists
+  wildfly_configure:
+    jboss_home: "{{jboss_home}}"
+    jboss_version: "{{jboss_version}}"
+    jboss_port_offset: "{{jboss_port_offset}}"
+    stop: true
+  ignore_errors: yes
+
+- name: Delete JBoss home
+  file: 
+    path: "{{jboss_home}}" 
+    state: absent
+
+- name: Install the JBoss scripts
+  import_tasks: install_jboss_scripts.yml
+
+- name: Install JBoss
+  wildfly_install:
+    zip: "{{ akt_pkg.remote_archive }}"
+    jboss_home: "{{ jboss_home }}"
+
+...

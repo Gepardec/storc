@@ -1,0 +1,24 @@
+---
+- block:
+
+  - name: Download main package
+    import_tasks: download_from_nexus.yml
+    vars:
+      pkg_name: "app_pkg"
+      d_pkg:
+        group_id: "{{ group_id }}"
+        artifact_id: "{{ artifact_id }}"
+        version: "{{ version }}"
+        classifier: "{{ classifier | default('pkg')}}"
+      clean_dirs: true
+      local_unzip: true
+      remote_unzip: true
+
+  - name: Read package descriptor
+    import_tasks: read_package_config.yml
+
+  - set_fact:
+      app_pkg:
+        pkg: "{{akt_pkg}}"
+        config: "{{akt_config}}"
+...

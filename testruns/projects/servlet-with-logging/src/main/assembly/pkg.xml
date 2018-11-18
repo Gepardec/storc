@@ -1,0 +1,45 @@
+<assembly>
+  <id>pkg</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>src/main/package</directory>
+      <outputDirectory>/</outputDirectory>
+      <fileMode>644</fileMode>
+      <directoryMode>755</directoryMode>
+    </fileSet>
+    <fileSet>
+      <directory>src/main/config</directory>
+      <outputDirectory>config</outputDirectory>
+      <fileMode>755</fileMode>
+      <directoryMode>755</directoryMode>
+    </fileSet>
+    <fileSet>
+      <directory>src/main/modules</directory>
+      <outputDirectory>modules</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>target</directory>
+      <outputDirectory>deployments</outputDirectory>
+      <directoryMode>755</directoryMode>
+      <includes>
+        <include>*.war</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+  <!-- dependencySets>
+    <dependencySet>
+      <outputDirectory>deployments</outputDirectory>
+      <fileMode>644</fileMode>
+      <directoryMode>755</directoryMode>
+      <useProjectArtifact>false</useProjectArtifact>
+      <scope>runtime</scope>
+      <includes>
+        <include>${project.groupId}:servlet-with-logging:war</include>
+      </includes>
+    </dependencySet>
+  </dependencySets -->
+</assembly>

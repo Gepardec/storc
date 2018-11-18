@@ -1,0 +1,9 @@
+
+[other]
+
+[jboss_servers]
+test_esiegl ansible_host=localhost ansible_user=esiegl
+test_esiegl1 ansible_host=localhost ansible_user=esiegl
+test_appl1 ansible_host=localhost ansible_user=esiegl
+test_tester ansible_host=localhost ansible_user=tester
+

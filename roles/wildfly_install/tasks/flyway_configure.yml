@@ -1,0 +1,21 @@
+---
+
+- name: Download package
+  import_tasks: download_from_nexus.yml
+  vars:
+    pkg_name: "flyway_pkg"
+    d_pkg: "{{app_pkg.config.flyway_pkg}}"
+    remote_unzip: true
+
+- block:
+  - name: Migrate database with Flyway
+    shell: "{{flyway_migrate_sh}} -a {{l_pkg.artifact_id}} -b {{akt_pkg.remote_dir}} -v {{l_pkg.version}}"
+    register: result
+  - name: print flyway output
+    debug:
+      var: result.stdout_lines
+  vars:
+    l_pkg: "{{app_pkg.config.flyway_pkg}}"
+    flyway_migrate_sh: "{{app_pkg.pkg.remote_dir}}/{{app_pkg.config.flyway_install.config}}/flyway_migrate.sh"
+
+...

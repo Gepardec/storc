@@ -1,0 +1,10 @@
+---
+- hosts: "{{host}}"
+  vars:
+    artifact_id: "servlet-with-db"
+    group_id: "at.test"
+    version: "1.1.0"
+    myTestProperty: DemoProperty2
+    is_debug_mode: true
+  roles:
+   - wildfly_install

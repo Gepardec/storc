@@ -1,0 +1,13 @@
+---
+- block:
+  - name: Stop JBoss
+    wildfly_configure:
+      jboss_home: "{{jboss_home}}"
+      jboss_version: "{{jboss_version}}"
+      jboss_port_offset: "{{jboss_port_offset}}"
+      jboss_rc_file: "{{l_jboss_rc_file}}"
+      stop: true
+  vars:
+    jboss_version: "{{app_pkg.config.jboss_pkg.artifact_id}}-{{app_pkg.config.jboss_pkg.version}}"
+
+...

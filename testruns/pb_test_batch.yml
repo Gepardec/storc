@@ -1,0 +1,11 @@
+---
+- hosts: "{{host}}"
+  vars:
+    artifact_id: "demobatch"
+    group_id: "at.test"
+    version: "1.0.0"
+    classifier: "batch"
+    myTestProperty: DemoProperty2
+    is_debug_mode: true
+  roles:
+   - wildfly_install

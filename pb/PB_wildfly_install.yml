@@ -1,0 +1,6 @@
+---
+- hosts: "{{host}}"
+  roles:
+   - wildfly_install
+  environment:
+    JBOSS_HOME: "{{jboss_home | default('jboss_home_ist_nicht_gesetzt')}}"

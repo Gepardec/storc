@@ -1,0 +1,79 @@
+---
+- set_fact:
+    prerequisites: []
+    wildfly_config_exists: false
+    flyway_config_exists: false
+    batch_exists: false
+    local_tmp_dir: "{{ local_home }}/Tmp/local"
+    remote_tmp_dir: "{{ remote_home }}/Tmp/remote"
+    l_jboss_rc_file: "{{jboss_rc_file | default(default_jboss_rc_file)}}"
+  vars:
+    local_home: "{{ lookup('env','HOME') }}"
+    remote_home: "{{ansible_env.HOME}}"
+    default_jboss_rc_file: "{{remote_home}}/bin/{{ansible_user}}.cfg"
+
+- block:
+  - name: Create local artifact download folder
+    file:
+      state: directory
+      path: "{{local_tmp_dir}}"
+    delegate_to: 127.0.0.1
+  - name: Create remote artifact download folder
+    file:
+      state: directory
+      path: "{{remote_tmp_dir}}"
+
+  - name: Get application package
+    import_tasks: application_package_get.yml
+
+  - name: Process Templates
+    import_tasks: process_templates.yml
+    vars:
+      d_pkg: "{{app_pkg}}"
+
+  - name: Get Prerequisites
+    include_tasks: get_prerequisite_package.yml
+    loop: "{{ app_pkg.config.prerequisites }}"
+
+  - name: Process Templates in prerequsites
+    include_tasks: process_templates.yml
+    loop: "{{ prerequisites }}"
+    loop_control:
+      loop_var: d_pkg
+
+  - name: Stop JBoss Server
+    include_tasks: wildfly_shutdown.yml
+    when: wildfly_config_exists == true
+
+  - name: Configure Database with Flyway
+    include_tasks: flyway_configure.yml
+    when: flyway_config_exists == true
+
+  vars:
+
+- block:
+  - name: Create WildFly instance
+    include_tasks: wildfly_create.yml
+    vars:
+      remote_home: "{{ansible_env.HOME}}"
+
+  - name: Configure WildFly prerequisites
+    include_tasks: wildfly_configure.yml
+    vars:
+      d_pkg: "{{item}}"
+    loop: "{{ prerequisites }}"
+
+  - name: Configure WildFly instance
+    include_tasks: wildfly_configure.yml
+    vars:
+      d_pkg: "{{app_pkg}}"
+  when: wildfly_config_exists == true
+
+- block:
+  - name: Install and configure batch
+    include_tasks: batch_configure.yml
+    vars:
+      d_pkg: "{{app_pkg}}"
+  when: batch_exists == true
+
+...

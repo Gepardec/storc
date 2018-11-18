@@ -1,0 +1,82 @@
+---
+- block:
+  - name: Include package descriptor
+    include_vars:
+      file: "{{akt_pkg.local_dir}}/package_descriptor.json"
+      name: des
+    register: descriptor_result
+    ignore_errors: yes
+
+  - name: Print descriptor
+    debug:
+      var: descriptor_result.ansible_facts.des
+
+  - set_fact:
+      tmp_des: "{{ descriptor_result.ansible_facts.des | default('') }}"
+  - set_fact:
+      tmp_jboss_pkg: "{{ tmp_des.jboss_pkg | default('') }}"
+      tmp_flyway_pkg: "{{ tmp_des.flyway_pkg | default('') }}"
+      tmp_jboss_install: "{{ tmp_des.jboss_install | default('') }}"
+      tmp_flyway_install: "{{ tmp_des.flyway_install | default('') }}"
+      tmp_batch_install: "{{ tmp_des.batch_install | default('') }}"
+
+  - set_fact:
+      akt_config:
+        jboss_pkg:
+          group_id: "{{ jboss_maven_group_id | default(tmp_jboss_pkg.group_id) | default('') }}"
+          artifact_id: "{{ jboss_maven_artifact_id | default(tmp_jboss_pkg.artifact_id) | default('') }}"
+          version: "{{ jboss_maven_version | default(tmp_jboss_pkg.version) | default('')}}"
+          classifier: "{{ tmp_jboss_pkg.classifier | default('') }}"
+          extension: "{{ tmp_jboss_pkg.extension | default('zip') }}"
+        flyway_pkg:
+          group_id: "{{ flyway_maven_group_id | default(tmp_flyway_pkg.group_id) | default('')}}"
+          artifact_id: "{{ flyway_maven_artifact_id | default(tmp_flyway_pkg.artifact_id) | default('')}}"
+          version: "{{ flyway_maven_version | default(tmp_flyway_pkg.version) | default('')}}"
+          classifier: "{{ tmp_flyway_pkg.classifier | default('') }}"
+          extension: "{{ tmp_flyway_pkg.extension | default('zip') }}"
+        jboss_install:
+          config:  "{{ tmp_jboss_install.config  | default('config')}}"
+          modules: "{{ tmp_jboss_install.modules | default('modules')}}"
+        flyway_install:
+          config: "{{ tmp_flyway_install.config | default('flyway-install/config')}}"
+        batch_install:
+          bin:    "{{ tmp_batch_install.bin    | default('batch-install/bin')}}"
+          conf: "{{ tmp_batch_install.conf | default('batch-install/config')}}" # Das Default config statt conf ist aus Kompatibilitaesgruenden noch Absicht.
+          lib:    "{{ tmp_batch_install.lib    | default('batch-install/lib')}}"
+          home:    "{{ tmp_batch_install.home    | default('batch-install/home')}}"
+        java_version:  "{{ tmp_des.java_version  | default('') }}"
+        prerequisites: "{{ tmp_des.prerequisites | default([]) }}"
+
+  - name: Print effective package configuration
+    debug:
+      var: akt_config
+
+  # Lets see whether we have in one of the packages Wildfly, Flyway or Batch installation
+  - name: Check for WildFly config
+    stat:
+      path: "{{akt_pkg.remote_dir}}/{{akt_config.jboss_install.config}}" 
+    register: wildfly_result
+
+  - set_fact:
+      wildfly_config_exists: true
+    when: wildfly_result.stat.exists != false
+
+  - name: Check for Flyway config
+    stat:
+      path: "{{akt_pkg.remote_dir}}/{{akt_config.flyway_install.config}}" 
+    register: flyway_result
+
+  - set_fact:
+      flyway_config_exists: true
+    when: flyway_result.stat.exists != false
+    
+  - name: Check for batch config
+    stat:
+      path: "{{akt_pkg.remote_dir}}/{{akt_config.batch_install.lib}}" 
+    register: batch_result
+
+  - set_fact:
+      batch_exists: true
+    when: batch_result.stat.exists != false
+    
+...

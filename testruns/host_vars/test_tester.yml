@@ -1,0 +1,10 @@
+#remote_home: "{{ansible_env.HOME}}"
+jboss_home: "{{remote_home}}/jboss_test_tester"
+jboss_port_offset: 300
+
+maven_repository_url: "file://{{ local_home }}/.m2/repository/"
+is_local_repo: true
+
+
+db_jdbc_url: "jdbc:h2:tcp://localhost:9092/~/test"
+test_property: meinvalue

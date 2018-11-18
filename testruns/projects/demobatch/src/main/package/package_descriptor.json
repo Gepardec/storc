@@ -1,0 +1,7 @@
+{
+    "batch_install": {
+        "bin": "batch-install/bin",
+        "conf": "batch-install/myconfig",
+        "lib": "batch-install/lib"
+    }
+}

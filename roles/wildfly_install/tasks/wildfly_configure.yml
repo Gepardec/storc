@@ -1,0 +1,37 @@
+---
+- block:
+  - name: Check for modules
+    stat:
+      path: "{{modules_dir}}"
+    register: modules_result
+  
+  - name: Copy modules to JBoss-modules directory
+    command: cp -r {{modules_dir}} {{jboss_home}}
+    when: modules_result.stat.exists != false
+  
+  - name: Start JBoss
+    wildfly_configure:
+      jboss_home: "{{jboss_home}}"
+      jboss_version: "{{jboss_version}}"
+      jboss_port_offset: "{{jboss_port_offset}}"
+      jboss_rc_file: "{{l_jboss_rc_file}}"
+      restart: true
+  
+  - name: Configure JBoss
+    wildfly_configure:
+      jboss_home: "{{jboss_home}}"
+      jboss_version: "{{jboss_version}}"
+      jboss_port_offset: "{{jboss_port_offset}}"
+      jboss_rc_file: "{{l_jboss_rc_file}}"
+      dir: "{{config_dir}}"
+    register: output
+  - name: Dump JBoss output
+    debug:
+      msg: '{{ output.meta.out }}'
+
+  vars:
+    modules_dir: "{{d_pkg.pkg.remote_dir}}/{{d_pkg.config.jboss_install.modules}}"
+    config_dir: "{{d_pkg.pkg.remote_dir}}/{{d_pkg.config.jboss_install.config}}"
+    jboss_version: "{{app_pkg.config.jboss_pkg.artifact_id}}-{{app_pkg.config.jboss_pkg.version}}"
+
+...

@@ -1,0 +1,59 @@
+---
+- name: Create batch_home
+  file:
+    state: directory
+    path: "{{batch_home}}"
+
+- name: var directory should exist
+  file:
+    state: directory
+    path: "{{batch_home}}/var"
+
+- name: logs directory should exist
+  file:
+    state: directory
+    path: "{{batch_home}}/log"
+
+- name: tmp directory should exist
+  file:
+    state: directory
+    path: "{{batch_home}}/tmp"
+
+- name: ext directory should exist
+  file:
+    state: directory
+    path: "{{batch_home}}/ext"
+
+- name: Copy bin directory
+  import_tasks: install_batch_dir.yml
+  vars:
+    b_dir_src: "{{d_pkg.pkg.remote_dir}}/{{d_pkg.config.batch_install.bin}}"
+    b_dir_dest: "{{batch_home}}/bin"
+
+- name: Copy lib directory
+  import_tasks: install_batch_dir.yml
+  vars:
+    b_dir_src: "{{d_pkg.pkg.remote_dir}}/{{d_pkg.config.batch_install.lib}}"
+    b_dir_dest: "{{batch_home}}/lib"
+
+- name: Copy conf directory
+  import_tasks: install_batch_dir.yml
+  vars:
+    b_dir_src: "{{d_pkg.pkg.remote_dir}}/{{d_pkg.config.batch_install.conf}}"
+    b_dir_dest: "{{batch_home}}/conf"
+
+- name: Copy batch home directory
+  import_tasks: install_batch_dir.yml
+  vars:
+    b_dir_src: "{{d_pkg.pkg.remote_dir}}/{{d_pkg.config.batch_install.home}}"
+    b_dir_dest: "{{batch_home}}/"
+    clean_dest: false
+
+- name: Check for postinstall script
+  stat: path="{{batch_home}}/bin/postinstall.sh"
+  register: postinstall
+
+- name: Execute postinstall script
+  shell: "{{batch_home}}/bin/postinstall.sh"
+  when: postinstall.stat.exists
+...

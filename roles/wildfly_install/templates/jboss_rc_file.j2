@@ -1,0 +1,14 @@
+# Die Datei wird beim Deployment automatisch erstellt und sollte nicht manuell editiert werden.
+JBOSS_RELEASE_NAME={{jboss_version}}
+JBOSS_HOME={{jboss_home}}
+JBOSS_PORT_OFFSET={{jboss_port_offset}}
+JBOSS_INSTANZ_NAME={{host}}
+{% if java_base is defined and java_version is defined %}
+# JAVA_HOME wird mittles java_base und java_version erzeugt.
+JAVA_HOME={{java_base}}/{{java_version}}
+{% elif java_version is defined %}
+# Variable java_base ist nicxht definiert, verwende Defaultwert /usr/local/java und Variable java_version
+JAVA_HOME=/usr/local/java/{{java_version}}
+{% else %}
+# java_version ist nicht definiert. Sie sollte im Installationspaket angegeben werden.
+{% endif %} 

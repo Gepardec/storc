@@ -1,0 +1,13 @@
+{
+  "jboss_install": {
+      "config": "config"
+  }, 
+  "jboss_pkg": {
+      "artifact_id": "jboss-eap", 
+      "classifier": "", 
+      "extension": "zip", 
+      "group_id": "org.jboss", 
+      "version": "6.4.0"
+  },
+  "java_version": "jdk1.8.0_144"
+}

@@ -1,0 +1,14 @@
+---
+- name: Print d_pkg in process_templates.yml
+  debug:
+    var: d_pkg
+
+- name: Process all templates
+  template:
+    src="{{ item.src }}"
+    dest="{{d_pkg.pkg.remote_dir}}/{{ item.path | regex_replace('\.j2','')  }}"
+  with_filetree: "{{d_pkg.pkg.local_dir}}/"
+  when:
+    - item.state=='file'
+    - item.path is search("\.j2$")
+...

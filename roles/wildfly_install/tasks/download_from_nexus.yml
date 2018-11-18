@@ -1,0 +1,85 @@
+---
+- block:
+  - set_fact:
+      akt_pkg:
+        mvn_pkg: "{{ d_pkg }}"
+        local_archive: "{{ local_tmp_archive }}"
+        remote_archive: "{{ remote_tmp_archive }}"
+        local_dir: "{{ local_dir }}"
+        remote_dir: "{{ remote_dir }}"
+
+  - name: Clean local artifact download folder
+    file:
+      state: absent
+      path: "{{local_dir}}"
+    delegate_to: 127.0.0.1
+    when: l_clean_dirs  == true
+  - name: Create local artifact download folder
+    file:
+      state: directory
+      path: "{{local_dir}}"
+    delegate_to: 127.0.0.1
+    when: l_clean_dirs  == true
+  - name: Clean remote artifact download folder
+    file:
+      state: absent
+      path: "{{remote_dir}}"
+    when: l_clean_dirs  == true
+  - name: Create remote artifact download folder
+    file:
+      state: directory
+      path: "{{remote_dir}}"
+    when: l_clean_dirs  == true
+
+  - name: Download Artifact from Nexus
+    maven_artifact_custom:
+      group_id: "{{d_pkg.group_id}}"
+      artifact_id: "{{d_pkg.artifact_id}}"
+      version: "{{d_pkg.version}}"
+      classifier: "{{d_pkg.classifier}}"
+      extension: zip
+      repository_url: "{{maven_repository_url}}"
+      dest: "{{local_tmp_archive}}"
+      local: "{{ is_local_repo | default('false') }}"
+    delegate_to: 127.0.0.1
+
+  - name: Create local artifact download folder
+    file:
+      state: directory
+      path: "{{local_dir}}"
+    delegate_to: 127.0.0.1
+    when: l_local_unzip == true
+  - name: Unzip package to local
+    unarchive:
+      src: "{{local_tmp_archive}}"
+      dest: "{{local_dir}}"
+    delegate_to: 127.0.0.1
+    when: l_local_unzip == true
+
+  - name: Create remote artifact download folder
+    file:
+      state: directory
+      path: "{{remote_dir}}"
+    when: l_remote_unzip == true
+  - name: Unzip package to remote
+    unarchive:
+      src: "{{local_tmp_archive}}"
+      dest: "{{remote_dir}}"
+    when: l_remote_unzip == true
+
+  - name: Copy to remote host
+    copy:
+      src: "{{ local_tmp_archive }}"
+      dest: "{{ remote_tmp_dir }}/"
+    when: l_remote_copy == true
+
+  vars:
+    local_tmp_archive: "{{ local_tmp_dir }}/{{d_pkg.artifact_id}}-{{d_pkg.version}}-{{d_pkg.classifier}}.zip"
+    remote_tmp_archive: "{{ remote_tmp_dir }}/{{d_pkg.artifact_id}}-{{d_pkg.version}}-{{d_pkg.classifier}}.zip"
+    remote_dir: "{{remote_tmp_dir}}/{{d_pkg.artifact_id}}"
+    local_dir: "{{local_tmp_dir}}/{{d_pkg.artifact_id}}"
+    l_local_unzip: "{{ local_unzip | default('false') }}"
+    l_remote_unzip: "{{ remote_unzip | default('false') }}"
+    l_remote_copy: "{{ remote_copy | default('false') }}"
+    l_clean_dirs: "{{ clean_dirs | default('false') }}"
+...
