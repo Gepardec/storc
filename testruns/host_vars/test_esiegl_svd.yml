@@ -1,7 +1,0 @@
-jboss_port_offset: 200
-
-maven_repository_url: "file://{{ local_home }}/.m2/repository/"
-is_local_repo: true
-
-batch_home: "{{remote_home}}/batch_{{inventory_hostname}}/"
-my_batch_property: "Instanz {{inventory_hostname}}" 

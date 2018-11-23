@@ -9,7 +9,7 @@
     mode: a+x
 - file:
     src: "{{remote_home}}/bin/jboss.sh"
-    dest: "{{remote_home}}/bin/{{ansible_user}}"
+    dest: "{{remote_home}}/bin/{{inventory_hostname}}"
     state: link
 - name: Create jboss_rc_file configuration
   template:

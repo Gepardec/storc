@@ -6,14 +6,10 @@ SCRIPTS_DIR=`dirname $MY_PATH`
 ANSIBLECONFIG_DIR=`dirname $SCRIPTS_DIR`
 
 # Umgebung setzen
-source /home/ansible/hacking/env-setup
-
-# ANSIBLECONFIG_DIR=/etc/ansible/ansibleconfig
+#source /home/ansible/hacking/env-setup
 
 #set -x
 cd $ANSIBLECONFIG_DIR || exit 1
-
-
 
 #Befuellen der uebergebenen Variablen
 INSTANZ="not_set"
@@ -21,8 +17,8 @@ NEXUS_GROUP_ID="not_set"
 NEXUS_ARTIFACT_ID="not_set"
 NEXUS_ARTIFACT_VERSION="not_set"
 NEXUS_CLASSIFIER=pkg
-KUNDE="not_set"
-STAGE="not_set"
+KUNDE=""
+STAGE=""
 
 #####################################################################
 ##                      print_usage
@@ -30,8 +26,7 @@ STAGE="not_set"
 print_usage(){
 cat <<EOF 1>&2
 usage: $PRG [-h] [-i instanz] [-g group_id] [-a artefact_id] [-v version] [-c classifier] [-k kunde] [-s stage] 
- oder
-       $PRG instanz group_id artefact_id version kunde stage 
+       
 Optionen:
     i instanz: Name der Instanz auf der das Paket installiert werden soll
     a artefact_id: Maven Artefact-Id des Installationspaketes
@@ -71,11 +66,11 @@ shift `expr $OPTIND - 1`
 
 echo "Starte Holen der aktuellsten Stages aus dem GIT-Repo"
 echo "git pull ../STAGES/$KUNDE/$STAGE" 
-( cd ../STAGES/$KUNDE/$STAGE && git pull )
+( cd ../STAGES/$KUNDE/$STAGE && git pull ) || echo "WARNING: Error pulling from git"
 
-echo "Starte Holen der aktuellsten Sourcen aus dem GIT-Repo"
-echo "git pull"
+echo "Starte Holen der aktuellsten Sourcen aus dem GIT-Repo in " `pwd`
+echo "git pull" 
 git pull
 
-ansible-playbook pb/PB_wildfly_install.yml -v -i ../STAGES/$KUNDE/$STAGE/hosts -e host=$INSTANZ -e group_id=$NEXUS_GROUP_ID -e artifact_id=$NEXUS_ARTIFACT_ID -e version=$NEXUS_ARTIFACT_VERSION -e classifier=$NEXUS_CLASSIFIER
+ansible-playbook pb/PB_wildfly_install.yml -v -i ../STAGES/$KUNDE/$STAGE/inventory -e host=$INSTANZ -e group_id=$NEXUS_GROUP_ID -e artifact_id=$NEXUS_ARTIFACT_ID -e version=$NEXUS_ARTIFACT_VERSION -e classifier=$NEXUS_CLASSIFIER
 

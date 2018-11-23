@@ -1,17 +1,17 @@
 #!/bin/bash
 
-#Auslesen des Dateinamens
-instanzUser=`basename $0`
-instanzHome=$HOME
+
+JBOSS_INSTANZ_NAME=`basename $0`
+RC_FILE=$HOME/.${JBOSS_INSTANZ_NAME}rc
+
+#Laden der Variablen für die Instanz ($JBOSS_RELEASE_NAME, $JBOSS_HOME, $JBOSS_PORT_OFFSET
+test -f $RC_FILE && . $RC_FILE
 
 #Das Script muss mit einem symbolischen Link aufgerufen werden
-if [ $instanzUser = jboss.sh ]; then
+if [ $JBOSS_INSTANZ_NAME = jboss.sh ]; then
 	echo "ERROR: Die Datei jboss.sh kann nicht direkt aufgerufen werden. Bitte setzen Sie einen symbolischen Link (z.B. jboss1)."
 	exit 1
 fi
-
-#Laden der Variablen für die Instanz ($JBOSS_RELEASE_NAME, $JBOSS_HOME, $JBOSS_PORT_OFFSET, $JBOSS_INSTANZ_NAME
-test -f $instanzHome/bin/${instanzUser}.cfg && . $instanzHome/bin/${instanzUser}.cfg
 
 #Überprüfen, ob die Variable $JBOSS_HOME gesetzt ist.
 if [ X$JBOSS_HOME = X ]; then
@@ -75,15 +75,9 @@ export JBOSS_PORT_OFFSET=$PORT_OFFSET
 
 rundir=$JBOSS_HOME/standalone
 
-#if [ $USER=root ]; then
-#        start="su - $instanzUser -c \"$JBOSS_HOME/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0 -Djboss.node.name=$JBOSS_INSTANZ_NAME $OFFSET_PROP $JBOSS_OPTS\""
-#else
-#        start="$JBOSS_HOME/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0 -Djboss.node.name=$JBOSS_INSTANZ_NAME $OFFSET_PROP $JBOSS_OPTS"
-#fi
-
 
 configFile=$rundir/configuration/standalone.xml
-displayName="JBoss Server $JBOSS_INSTANZ ($instanzUser)"
+displayName="JBoss Server $JBOSS_INSTANZ_NAME"
 
 logdir=$rundir/log
 deployDir=$rundir/deployments/$DEPLOY_SUBDIR

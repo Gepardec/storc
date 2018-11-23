@@ -10,7 +10,7 @@
   vars:
     local_home: "{{ lookup('env','HOME') }}"
     remote_home: "{{ansible_env.HOME}}"
-    default_jboss_rc_file: "{{remote_home}}/bin/{{ansible_user}}.cfg"
+    default_jboss_rc_file: "{{remote_home}}/.{{inventory_hostname}}rc"
 
 - block:
   - name: Create local artifact download folder
