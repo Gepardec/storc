@@ -66,7 +66,7 @@ shift `expr $OPTIND - 1`
 
 echo "Starte Holen der aktuellsten Stages aus dem GIT-Repo"
 echo "git pull ../STAGES/$KUNDE/$STAGE" 
-( cd ../STAGES/$KUNDE/$STAGE && git pull ) || echo "WARNING: Error pulling from git"
+( cd ../STAGES/$KUNDE/$STAGE && git pull ) || echo "WARNING: Error pulling stage from git"
 
 echo "Starte Holen der aktuellsten Sourcen aus dem GIT-Repo in " `pwd`
 echo "git pull" 

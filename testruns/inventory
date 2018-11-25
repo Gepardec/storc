@@ -2,6 +2,7 @@
 [other]
 
 [jboss_servers]
+demo_dev ansible_host=localhost
 test_esiegl ansible_host=localhost ansible_user=esiegl
 test_esiegl1 ansible_host=localhost ansible_user=esiegl
 test_appl1 ansible_host=localhost ansible_user=esiegl

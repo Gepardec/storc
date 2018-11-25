@@ -1,4 +1,4 @@
 JBOSS_PORT_OFFSET={{jboss_port_offset}}
-let CLI_PORT=9999+$JBOSS_PORT_OFFSET
+let CLI_PORT=9990+$JBOSS_PORT_OFFSET
 CLI="{{jboss_home}}/bin/jboss-cli.sh --connect --controller=localhost:$CLI_PORT"
 $CLI /system-property=my.template.property:read-resource | grep result | grep meinvalue
