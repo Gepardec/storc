@@ -49,4 +49,7 @@ oder mit Skript
 
 ```
  ../bin/deploy.sh -i demo_dev  -a servlet-with-logging -g at.test -v 1.1.0
+
+ ./database/run_database.sh &
+ ../bin/deploy.sh -i demo_dev  -a servlet-with-db -g at.test -v 1.1.0
 ```
