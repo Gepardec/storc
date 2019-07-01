@@ -6,7 +6,7 @@ Voraussetzungen für Demo-Beispiele
 
 Maven installiert
 JBoss EAP oder WildFly ZIP-Datei vorhanden
-Flyway Zip-Datei vorhanden
+[Flyway Zip-Datei](https://flywaydb.org/documentation/commandline/#download-and-installation) vorhanden
 
 JBoss und Flyway ins lokale Repository installieren
 ---------------------------------------------------
