@@ -7,7 +7,7 @@ JBOSS_INSTANZ_NAME={{host}}
 # JAVA_HOME wird mittles java_base und java_version erzeugt.
 JAVA_HOME={{java_base}}/{{java_version}}
 {% elif java_version is defined %}
-# Variable java_base ist nicxht definiert, verwende Defaultwert /usr/local/java und Variable java_version
+# Variable java_base ist nicht definiert, verwende Defaultwert /usr/local/java und Variable java_version
 JAVA_HOME=/usr/local/java/{{java_version}}
 {% else %}
 # java_version ist nicht definiert. Sie sollte im Installationspaket angegeben werden.
