@@ -10,6 +10,6 @@ Optionen:
    - c classifier: Maven Classifier des Installationspaketes. Default: $NEXUS_CLASSIFIER
    - k kunde: Kundenbezeichner der Instanz (z.B: CUST1, CUST2,...)
    - s stage: Stage-Bezeichnung der Instanz (z.B: ET, FT, ST, PR,...)
-   - h: Diese Hilfeseite
+   - h: Auflistung der Parameter
    
 Deployed ein durch Maven-Koordinaten angegebenes Installationspaket auf einer Instanz.
