@@ -102,7 +102,7 @@ def remove_version_dir( dest):
         shutil.rmtree(file)
         moved = True
       else:
-        print "Error: Sollte directory sein: " + file
+        print("Error: Sollte directory sein: " + file)
     if not moved:
       return True, "Something was wrong with the package, was empty? Directory: " + dest
     return False, "Files moved"

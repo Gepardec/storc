@@ -3,7 +3,6 @@ jboss_home: "{{remote_home}}/jboss_test_esiegl"
 jboss_port_offset: 200
 
 maven_repository_url: "file://{{ local_home }}/.m2/repository/"
-is_local_repo: true
 
 
 db_jdbc_url: "jdbc:h2:tcp://localhost:9092/~/test"

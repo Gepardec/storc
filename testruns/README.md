@@ -53,3 +53,10 @@ oder mit Skript
  ./database/run_database.sh &
  ../bin/deploy.sh -i demo_dev  -a servlet-with-db -g at.test -v 1.1.0
 ```
+
+Test Python 3 Compatibility
+---------------------------
+
+```
+ ansible-playbook pb_install_sevlet_with_logging.yml -e host=demo_dev -e 'ansible_python_interpreter=/usr/bin/python3'
+```

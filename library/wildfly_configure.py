@@ -336,11 +336,11 @@ def execute(p):
     global log_out
     result,err = p.communicate()
     if p.returncode != 0:
-        return True, result + err
+        return True, str(result + err)
 
     logging.info( result)
     log_out.append( result)
-    return False, result
+    return False, str(result)
 
 def unzip( zip, dest):
     zip_ref = zipfile.ZipFile(zip, 'r')
