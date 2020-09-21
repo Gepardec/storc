@@ -103,7 +103,7 @@ def initialise( data):
     global log_out
 
     jboss_version = data['jboss_version']
-    jboss_home = data['jboss_home']
+    jboss_home = data['jboss_home'] 
     jboss_rc_file = data['jboss_rc_file']
     jboss_port_offset =  data['jboss_port_offset']
 
